@@ -98,9 +98,9 @@ function nav(){const u=me(),tot=db.cart.map(W).filter(Boolean).reduce((a,w)=>a+w
 const pend=db.apps.filter(a=>a.status==='pending').length+db.works.filter(w=>w.approval==='pending').length+db.orders.filter(o=>!o.cancelled&&o.status===0&&o.slip).length;
 const dd=(t,m)=>`<div class="dd"><a tabindex="0">${t} ▾</a><div class="menu">${m}</div></div>`;
 const acct=u?dd(esc(u.name),`<a href="#/profile">โปรไฟล์</a><a href="#/orders">คำสั่งซื้อ</a>${isA()?'<a href="#/upload">＋ อัปโหลดผลงาน</a>':''}${u.role==='customer'&&!u.artist?'<a href="#/apply">🎨 สมัครเป็นศิลปิน</a>':''}${isMgr()?`<a href="#/admin">หลังบ้าน${pend?` (${pend})`:''}</a>`:''}<a href="#/" onclick="logout();return false">ออกจากระบบ</a>`):'<a href="#/login">เข้าสู่ระบบ</a>';
-$('#hd').innerHTML=`<nav class="hl"><a href="#/about">เกี่ยวกับเรา</a>${dd('ผลงาน',db.cats.map(c=>`<a href="#/" data-v="${esc(c)}" onclick="shop('cat',this.dataset.v);return false">${esc(c)}</a>`).join('')+`<a href="#/" onclick="shop('cat','');return false"><b>ดูทั้งหมด</b></a>`)}${dd('ตามศิลปิน',db.artists.map(a=>`<a href="#/" data-v="${a.id}" onclick="shop('artist',this.dataset.v);return false">${esc(a.name)}</a>`).join(''))}</nav>
+$('#hd').innerHTML=`<nav class="hl">${dd('ผลงาน',db.cats.map(c=>`<a href="#/" data-v="${esc(c)}" onclick="shop('cat',this.dataset.v);return false">${esc(c)}</a>`).join('')+`<a href="#/" onclick="shop('cat','');return false"><b>ดูทั้งหมด</b></a>`)}<input id="hs" class="hs" list="al" placeholder="🔍 ค้นหาศิลปิน / ผลงาน" value="${esc(F.q)}" onkeydown="if(event.key==='Enter')hsearch()"><datalist id="al">${db.artists.map(a=>`<option value="${esc(a.name)}">`).join('')}</datalist></nav>
 <a class="lg" href="#/" aria-label="ArtCorner"><svg viewBox="0 0 48 48" width="52" height="52"><circle cx="24" cy="24" r="22" fill="none" stroke="#111" stroke-width="3"/><circle cx="24" cy="24" r="16" fill="none" stroke="#e63946" stroke-width="3"/><circle cx="24" cy="24" r="10" fill="none" stroke="#2ab7b0" stroke-width="3"/><circle cx="24" cy="24" r="4.5" fill="#111"/></svg></a>
-<nav class="hr">${acct}<a href="#/contact">ติดต่อ</a><a href="#/wishlist">ถูกใจ <span style="color:#e63946">♥</span>${db.wish.length?' '+db.wish.length:''}</a><a class="ct" href="#/cart">ตะกร้า / ${baht(tot)} <span class="cnt">${db.cart.length}</span></a></nav>`}
+<nav class="hr">${acct}<a href="#/wishlist">ถูกใจ <span style="color:#e63946">♥</span>${db.wish.length?' '+db.wish.length:''}</a><a class="ct" href="#/cart">ตะกร้า / ${baht(tot)} <span class="cnt">${db.cart.length}</span></a></nav>`}
 function doLogin(){const e=val('le').toLowerCase(),pw=$('#lp').value,u=db.users.find(x=>x.email===e&&x.pass===H(pw));
 if(!chk('lerr',[[!e||!pw,'กรอกอีเมลและรหัสผ่าน'],[e&&pw&&!u,'อีเมลหรือรหัสผ่านไม่ถูกต้อง']]))return;
 db.session=u.id;save();toast('ยินดีต้อนรับ '+u.name);to(isMgr()?'#/admin':'#/')}
@@ -128,12 +128,12 @@ if(!confirm('ลบผลงาน “'+w.title+'” ?'))return;db.works=db.work
 const F={q:'',cat:'',artist:'',min:'',max:'',sort:'new'};
 const P={};let post=[];
 P.home=()=>`${heroHTML()}${sec('ผลงานมาใหม่')}
-<div class="bar" id="shop"><input placeholder="🔍 ค้นหาชื่อผลงาน" value="${esc(F.q)}" oninput="F.q=this.value;F.page=0;drawGrid()">
+<div class="bar" id="shop"><input placeholder="🔍 ค้นหาชื่อผลงานหรือศิลปิน" value="${esc(F.q)}" oninput="F.q=this.value;F.page=0;drawGrid()">
 <select onchange="F.cat=this.value;F.page=0;drawGrid()"><option value="">ทุกหมวด</option>${db.cats.map(c=>`<option ${F.cat===c?'selected':''}>${c}</option>`).join('')}</select>
 <select onchange="F.artist=this.value;F.page=0;drawGrid()"><option value="">ทุกศิลปิน</option>${db.artists.map(a=>`<option value="${a.id}" ${F.artist===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select>
 <input type="number" placeholder="ราคาต่ำสุด" value="${F.min}" oninput="F.min=this.value;F.page=0;drawGrid()"><input type="number" placeholder="ราคาสูงสุด" value="${F.max}" oninput="F.max=this.value;F.page=0;drawGrid()">
 <select onchange="F.sort=this.value;F.page=0;drawGrid()"><option value="new">ใหม่สุด</option><option value="lo" ${F.sort==='lo'?'selected':''}>ราคาต่ำ → สูง</option><option value="hi" ${F.sort==='hi'?'selected':''}>ราคาสูง → ต่ำ</option></select></div><div id="grid" class="grid"></div><div id="pgr"></div>`;
-function drawGrid(){const g=$('#grid');if(!g)return;let l=db.works.filter(w=>w.approval==='approved'&&(!F.q||w.title.includes(F.q))&&(!F.cat||w.cat===F.cat)&&(!F.artist||w.artist===F.artist)&&(!F.min||w.price>=+F.min)&&(!F.max||w.price<=+F.max));
+function drawGrid(){const g=$('#grid');if(!g)return;let l=db.works.filter(w=>w.approval==='approved'&&(!F.q||(w.title+' '+(A(w.artist)?.name||'')).toLowerCase().includes(F.q.toLowerCase()))&&(!F.cat||w.cat===F.cat)&&(!F.artist||w.artist===F.artist)&&(!F.min||w.price>=+F.min)&&(!F.max||w.price<=+F.max));
 if(F.sort==='lo')l.sort((a,b)=>a.price-b.price);else if(F.sort==='hi')l.sort((a,b)=>b.price-a.price);else l.reverse();
 F.page=Math.min(F.page||0,Math.max(0,Math.ceil(l.length/GS)-1));g.innerHTML=l.slice(F.page*GS,F.page*GS+GS).map(w=>wc(w)).join('')||'<p class="mu">ไม่พบผลงานตามเงื่อนไข</p>';$('#pgr').innerHTML=pager(l.length,F.page,'F.page=#;drawGrid()',GS)}
 P.work0=id=>{const w=W(id);if(!w)return'<p>ไม่พบผลงาน</p>';const a=A(w.artist),inC=db.cart.includes(id),ok=w.status==='available'&&w.approval==='approved';
@@ -221,6 +221,7 @@ const sec=t=>`<div class="sec"><h2>${t}</h2></div>`;
 const wc=w=>{const ok=w.status==='available'&&w.approval==='approved',inC=db.cart.includes(w.id);
 return`<div class="pc"><a href="#/work/${w.id}" class="pt">${art(w)}${ok?'':stTag(w)}</a><button class="hb ${db.wish.includes(w.id)?'on':''}" onclick="wish('${w.id}')" aria-label="ถูกใจ">♥</button><a href="#/work/${w.id}" class="pn">${esc(w.title)}</a><div class="mu">${esc(A(w.artist)?.name)}</div><div class="pr">${baht(w.price)}</div><button class="btn o cta" ${ok&&!inC?'':'disabled'} onclick="addCart('${w.id}')">${inC?'อยู่ในตะกร้า':ok?'ใส่ตะกร้า':'ไม่พร้อมขาย'}</button></div>`};
 function wish(id){const i=db.wish.indexOf(id);i<0?db.wish.push(id):db.wish.splice(i,1);save();go()}
+function hsearch(){const v=val('hs'),a=db.artists.find(x=>x.name===v);F.q=a?'':v;F.artist=a?a.id:'';F.cat='';F.min='';F.max='';F.page=0;to('#/');setTimeout(()=>$('#shop')?.scrollIntoView({behavior:'smooth'}),80)}
 function shop(k,v){F.cat='';F.artist='';F[k]=v;F.page=0;to('#/');setTimeout(()=>$('#shop')?.scrollIntoView({behavior:'smooth'}),80)}
 let HI=0;
 function heroHTML(){const l=db.works.filter(w=>w.approval==='approved').sort((a,b)=>b.price-a.price).slice(0,4);if(l.length<2)return'';
@@ -228,8 +229,6 @@ post.push(()=>{slide(0);clearInterval(window.HT);const h=setInterval(()=>slide(H
 return`<div id="hero"><div id="trk">${l.map(w=>`<a class="sl" href="#/work/${w.id}">${art(w)}<div class="cap"><b>${esc(w.title)}</b><span>${esc(A(w.artist)?.name)} · ${baht(w.price)}</span></div></a>`).join('')}</div></div><div class="dots">${l.map((_,i)=>`<span onclick="slide(${i})"></span>`).join('')}</div>`}
 function slide(n){const t=$('#trk');if(!t||!t.style)return;const k=t.children.length,w=$('#hero').clientWidth;HI=(n+k)%k;t.style.transform=`translateX(${w*.12-HI*w*.78}px)`;[...t.children].forEach((c,i)=>c.classList.toggle('on',i===HI));document.querySelectorAll('.dots span').forEach((d,i)=>d.classList.toggle('on',i===HI))}
 P.wishlist=()=>{const l=db.wish.map(W).filter(w=>w&&w.approval==='approved');return sec('รายการที่ถูกใจ ♥')+(l.length?`<div class="grid">${l.map(wc).join('')}</div>`:'<p class="mu" style="text-align:center">ยังไม่มีรายการที่ถูกใจ — กดหัวใจที่ผลงานเพื่อเก็บไว้ดูภายหลัง</p>')};
-P.about=()=>sec('เกี่ยวกับเรา')+'<p style="max-width:680px;margin:auto;text-align:center">ArtCorner คือพื้นที่ให้นักศึกษาศิลปะนำผลงานต้นฉบับมาจำหน่าย ทุกชิ้นผ่านการตรวจสอบโดยทีมงานก่อนเผยแพร่ ผลงาน 1 ชิ้นมีเจ้าของได้ 1 คน</p>';
-P.contact=()=>sec('ติดต่อเรา')+'<div class="box" style="max-width:480px;margin:auto"><p>อีเมล: hello@artcorner.example<br>LINE: @artcorner<br>เวลาทำการ: จันทร์–ศุกร์ 9:00–17:00</p></div>';
 P.admin=t=>{const tabs=[['dash','📊 Dashboard'],['works','ผลงาน'],['orders','คำสั่งซื้อ'],['apps','ใบสมัครศิลปิน'],...(isAd()?[['users','ผู้ใช้'],['cats','หมวดหมู่'],['logs','Log'],['set','ตั้งค่า']]:[])];t=tabs.some(x=>x[0]===t)?t:'dash';
 return`<div class="row" style="margin-bottom:12px">${tabs.map(([k,l])=>`<a class="btn ${k===t?'':'o'} sm" href="#/admin/${k}">${l}</a>`).join('')}</div>`+AD[t]()};
 function go(){const h=location.hash.slice(2).split('/'),p=P[h[0]]?h[0]:'home',need={orders:me(),profile:me(),edit:me(),upload:isA(),admin:isMgr(),apply:me()};post=[];clearInterval(window.HT);nav();

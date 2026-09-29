@@ -68,3 +68,5 @@ header#hd a{white-space:nowrap}.lg{display:flex}
 .pn{display:block;margin-top:14px;font-size:16px}.pn:hover{color:var(--ac)}.pr{font-weight:700;font-size:17px;margin:2px 0 12px}
 .cta{padding:8px 26px}.cta:disabled{opacity:.4}
 #up{position:fixed;right:22px;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:50%;border:2px solid var(--fg);background:var(--bg);color:var(--fg);font-size:26px;line-height:1;cursor:pointer;display:none;z-index:8}#up.show{display:block}
+
+header#hd .hs{width:240px;padding:7px 12px;font-weight:400;font-size:14px}@media(max-width:900px){header#hd .hs{width:200px}}
