@@ -112,3 +112,14 @@ header#hd .sb{display:inline-block}header#hd .sb .hs{padding-left:34px}.row>.sb{
 
 /* ---- watermark overlay (vector demo art) ---- */
 .th{position:relative;overflow:hidden}.wm{position:absolute;inset:0;pointer-events:none;background-repeat:repeat}
+
+/* ---- payment QR ---- */
+.qrb{max-width:250px}.qrimg{width:100%;max-width:250px;display:block;border:1px solid var(--ln);border-radius:6px;background:#fff}
+.amt{margin:8px 0;padding:8px 10px;background:var(--card);border:2px solid var(--ac);border-radius:4px;text-align:center}.amt b{font-size:24px}
+
+/* ---- reviews / likes ---- */
+.st{color:#f5a623;letter-spacing:1px}
+
+/* ---- recommendations ---- */
+.why{margin-top:6px;text-align:center;font-size:12px}
+a.tag{cursor:pointer}a.tag:hover{background:var(--ac);color:#fff}
