@@ -90,3 +90,25 @@ header#hd{background:var(--hdr);-webkit-backdrop-filter:saturate(1.2) blur(10px)
 .sl{box-shadow:0 10px 28px rgba(0,0,0,.14)}
 @media(prefers-reduced-motion:no-preference){.pt{transition:transform .25s ease,box-shadow .25s ease}.pc:hover .pt{transform:translateY(-3px);box-shadow:inset 0 0 36px rgba(0,0,0,.09),0 4px 8px rgba(0,0,0,.08),0 16px 32px rgba(0,0,0,.12)}}
 @media print{body::before{display:none}}
+
+/* ---- search field with simple line icon ---- */
+.sb{position:relative;display:block}.sb input{padding-left:34px}
+.sb .mg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none}.sb:focus-within .mg{color:var(--ac)}
+header#hd .sb{display:inline-block}header#hd .sb .hs{padding-left:34px}.row>.sb{flex:0 1 260px}
+
+/* ---- page / image transition animations ---- */
+.wnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes inR{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-48px)}to{opacity:1;transform:none}}
+@keyframes zoomIn{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:no-preference){
+.pg-in{animation:rise .4s ease both}
+.dir-n{animation:inR .45s cubic-bezier(.2,.7,.2,1) both}.dir-p{animation:inL .45s cubic-bezier(.2,.7,.2,1) both}
+.pg-in .two>.card,.dir-n .two>.card,.dir-p .two>.card{animation:zoomIn .6s ease both}
+.dir-n .two>div:last-child,.dir-p .two>div:last-child{animation:rise .5s .1s ease both}
+#grid.anim .pc{animation:rise .5s ease both}#grid.anim .pc:nth-child(2){animation-delay:0.05s}#grid.anim .pc:nth-child(3){animation-delay:0.10s}#grid.anim .pc:nth-child(4){animation-delay:0.15s}#grid.anim .pc:nth-child(5){animation-delay:0.20s}#grid.anim .pc:nth-child(6){animation-delay:0.25s}#grid.anim .pc:nth-child(7){animation-delay:0.30s}#grid.anim .pc:nth-child(8){animation-delay:0.35s}#grid.anim .pc:nth-child(9){animation-delay:0.40s}#grid.anim .pc:nth-child(10){animation-delay:0.45s}#grid.anim .pc:nth-child(11){animation-delay:0.50s}#grid.anim .pc:nth-child(12){animation-delay:0.55s}
+}
+
+/* ---- watermark overlay (vector demo art) ---- */
+.th{position:relative;overflow:hidden}.wm{position:absolute;inset:0;pointer-events:none;background-repeat:repeat}
