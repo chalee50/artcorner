@@ -26,7 +26,7 @@ label{display:block;margin:10px 0 2px;color:var(--mu);font-size:13px}
 .box{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px solid var(--ln)}td:first-child{color:var(--mu);width:34%}
 .steps{display:flex;gap:4px;margin:10px 0}.steps div{flex:1;text-align:center;font-size:12px;padding:6px 2px;border-radius:6px;background:var(--ln);color:var(--mu)}.steps .on{background:var(--ac);color:#fff;font-weight:600}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>.grow{flex:1}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>.grow{flex:1 1 120px;min-width:0}.row>.grow input,.row>.grow select{min-width:0;width:100%;box-sizing:border-box}
 .mini{width:56px;height:70px;border-radius:6px;overflow:hidden;flex:none}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 18px;border-radius:99px;opacity:0;transition:.3s;pointer-events:none}#toast.s{opacity:1}
 .slip{max-width:200px;border-radius:8px;border:1px solid var(--ln)}

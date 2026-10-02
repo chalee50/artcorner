@@ -1,1 +1,3 @@
-.vercel
+data/
+__pycache__/
+*.pyc
